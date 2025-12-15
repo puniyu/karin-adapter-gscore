@@ -1,5 +1,12 @@
 # 变更日志
 
+## [1.0.1](https://github.com/puniyu/karin-adapter-gscore/compare/v1.0.0...v1.0.1) (2025-12-15)
+
+
+### 🔧 其他更新
+
+* 初始化仓库 ([16c3a7b](https://github.com/puniyu/karin-adapter-gscore/commit/16c3a7b7f1d1a4018e04dad8715bb2a48a778afc))
+
 ## [1.3.0](https://github.com/CandriaJS/karin-plugin-git/compare/v1.2.0...v1.3.0) (2025-11-29)
 
 

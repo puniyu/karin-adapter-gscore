@@ -1,6 +1,6 @@
 {
   "name": "@puniyu/karin-adapter-gscore",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "puniyu adapter for karin",
   "homepage": "https://github.com/puniyu/karin-plugin-git",
   "bugs": {

@@ -1,5 +1,5 @@
 import { Config } from '@/common'
-import { ImageType, Message, MessageType } from '@/types'
+import { Message, MessageType } from '@/types'
 import { Elements } from 'node-karin'
 
 export const KarinConverGscore = async (

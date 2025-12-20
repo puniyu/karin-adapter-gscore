@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { config, requireFileSync } from 'node-karin'
+import { requireFileSync } from 'node-karin'
 
 
 const filePath = fileURLToPath(import.meta.url).replace(/\\/g, '/')

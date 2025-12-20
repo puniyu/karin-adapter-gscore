@@ -1,11 +1,7 @@
 import { KarinConverGscore } from './core/convert'
 import { AdapterGscore } from './core/client'
-import karin, { hooks, Message, Permission } from 'node-karin'
-import {
-  MessageReceive,
-  Scene,
-  PermissionType,
-} from '@/types'
+import { hooks, logger, Message, Permission } from 'node-karin'
+import { MessageReceive, Scene, PermissionType } from '@/types'
 import { getAvatar, getUserPerm } from './utils/user'
 
 const getPerm = (e: Message): Permission => {
@@ -20,12 +16,8 @@ const getPerm = (e: Message): Permission => {
 }
 
 export const KARIN_PLUGIN_INIT = async () => {
-  let client: AdapterGscore
+  const client = new AdapterGscore()
 
-  karin.once('online', async () => {
-    client = new AdapterGscore()
-    await client.init()
-  })
   hooks.message(async (message: Message) => {
     const content = await KarinConverGscore(message.elements)
     const pm_type = message.isGroup
@@ -47,6 +39,7 @@ export const KARIN_PLUGIN_INIT = async () => {
         avatar: await getAvatar(message, message.userId),
       },
     }
+    logger.debug(client.logger(), `发送消息: message_id: ${message.messageId}`)
     client.send(msg)
   })
 }

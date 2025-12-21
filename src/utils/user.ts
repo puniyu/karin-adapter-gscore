@@ -6,27 +6,37 @@ export const getAvatar = async (e: Message, userId: string) => {
   return await bot.getAvatarUrl(userId)
 }
 
-export const getUserPerm = async (pm_type: PermissionType, pm: Permission): Promise<number> => {
-  switch (pm) {
-    case 'master': return 1
-    case 'admin': return 2
-    case 'all': return 6
+const getPermission = (e: Message): Permission => {
+  if (e.isMaster) return 'master'
+  if (e.isAdmin) return 'admin'
+
+  if (e.isGroup) {
+    if (e.sender.role === 'owner') return 'group.owner'
+    return 'all'
   }
-  
-  switch (pm_type) {
-    case PermissionType.Channel:
-      switch (pm) {
-        case 'guild.owner': return 2
-        case 'guild.admin': return 4
-      }
-      break
-    case PermissionType.Group:
-      switch (pm) {
-        case 'group.owner': return 2
-        case 'group.admin': return 1
-      }
-      break
+
+  if ('role' in e.sender && e.sender.role === 'owner') return 'guild.owner'
+
+  return 'all'
+}
+
+export const getUserPerm = async (e: Message): Promise<number> => {
+  const pm_type = e.isGroup ? PermissionType.Group : PermissionType.Channel
+  const pm = getPermission(e)
+
+  const permissionMap: Record<string, number> = {
+    master: 1,
+    admin: 2,
+    all: 6,
+    [`${PermissionType.Channel}.guild.owner`]: 2,
+    [`${PermissionType.Channel}.guild.admin`]: 4,
+    [`${PermissionType.Group}.group.owner`]: 2,
+    [`${PermissionType.Group}.group.admin`]: 1,
   }
-  
-  return 6
+
+  if (permissionMap[pm] !== undefined) {
+    return permissionMap[pm]
+  }
+
+  return permissionMap[`${pm_type}.${pm}`] ?? 6
 }

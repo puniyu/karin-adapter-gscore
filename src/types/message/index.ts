@@ -21,7 +21,7 @@ export enum MessageType {
   Record = 'record',
   /** 转发消息 */
   Node = 'node',
-    /** 图片大小 */
+  /** 图片大小 */
   ImageSize = 'image_size',
 }
 
@@ -33,50 +33,52 @@ export const enum ImageType {
 
 export interface Button {
   text: string
-  data: string
+  data?: string
   /** 按下显示的值 */
-  pressed_text: string
+  pressed_text?: string
   /**
    * 0灰色线框
    * 1蓝色线框
    */
-  style: 0 | 1
+  style?: 0 | 1
   /**
    * 0跳转按钮
    * 1回调按钮
    * 2命令按钮
    */
-  action: 0 | 1 | 2
+  action?: 0 | 1 | 2
   /**
    * 0指定用户
    * 1管理者
    * 2所有人可按
    * 3指定身份组
    */
-  permisson: 0 | 1 | 2
+  permisson?: 0 | 1 | 2
   /** 仅限频道可用 */
-  specify_role_ids: string[]
+  specify_role_ids?: string[]
   /** 指定用户 */
-  specify_user_ids: string[]
-  unsupport_tips: string
+  specify_user_ids?: string[]
+  unsupport_tips?: string
 }
 
 export interface MessageData {
   [MessageType.Text]: string
   [MessageType.Markdown]: string
-  [MessageType.Buttons]: Button[] | Button
+  [MessageType.Buttons]: Button[] | Button[][] | Button
   [MessageType.Image]: string
   [MessageType.File]: `${string}|${string}`
   [MessageType.At]: string
   [MessageType.Reply]: string
+  [MessageType.Record]: string
+  [MessageType.Node]: Message[]
   [MessageType.ImageSize]: [{ width: number; height: number }]
 }
 export type Message = {
   [K in keyof MessageData]: {
-    type: K;
-    data: MessageData[K];
+    type: K
+    data: MessageData[K]
   }
-}[keyof MessageData];
+}[keyof MessageData]
 
 export enum Scene {
   Group = 'group',
@@ -97,7 +99,6 @@ export interface MessageReceive {
   content: Message[]
   sender: SenderType
 }
-
 
 /** 收到Gscore的包 */
 export interface MessageSend {

@@ -86,10 +86,10 @@ jobs:
           bun x pkg-pr-new publish --json output.json --comment=off > plugin.txt 2>&1
 
           echo "## 成功推送的Package包 :" >> $GITHUB_STEP_SUMMARY
-          echo "包名: \`@candriajs/karin-plugin-git\`" >> $GITHUB_STEP_SUMMARY
+          echo "包名: \`@puniyu/karin-adapter-gscore\`" >> $GITHUB_STEP_SUMMARY
           echo "使用 pnpm:" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "pnpm add https://pkg.pr.new/${{ github.repository }}/@candriajs/karin-plugin-git@${{ needs.beta-info.outputs.short_commit_hash }} -w" >> $GITHUB_STEP_SUMMARY
+          echo "pnpm add https://pkg.pr.new/${{ github.repository }}/@puniyu/karin-adapter-gscore@${{ needs.beta-info.outputs.short_commit_hash }} -w" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
 
@@ -112,5 +112,5 @@ jobs:
 
             你可以通过以下命令安装该版本：
             ```
-            pnpm add https://pkg.pr.new/${{ github.repository }}/@candriajs/karin-plugin-git@${{ needs.beta-info.outputs.short_commit_hash }} -w
+            pnpm add https://pkg.pr.new/${{ github.repository }}/@puniyu/karin-adapter-gscore@${{ needs.beta-info.outputs.short_commit_hash }} -w
             ```

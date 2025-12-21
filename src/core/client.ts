@@ -24,12 +24,12 @@ export class AdapterGscore extends AdapterBase implements AdapterType {
   }
 
   logger() {
-    logger.chalk.rgb(224, 105, 123)('[GsCore]')
+    return logger.chalk.rgb(224, 105, 123)('[GsCore]')
   }
 
   #initWebSocket() {
-    const isWss = Config.config.wss
-    const gecorePath = `${isWss ? 'wss' : 'ws'}://${Config.config.host}:${Config.config.port}/ws/karin`
+    const isWss = Config.wss
+    const gecorePath = `${isWss ? 'wss' : 'ws'}://${Config.host}:${Config.port}/ws/karin`
 
     this.adapter = {
       index: 0,

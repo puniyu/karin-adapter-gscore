@@ -1,23 +1,22 @@
 {
   "name": "@puniyu/karin-adapter-gscore",
   "version": "1.0.0",
-  "description": "puniyu adapter for karin",
-  "homepage": "https://github.com/puniyu/karin-plugin-git",
+  "description": "GsCore adapter for karin",
+  "homepage": "https://github.com/puniyu/karin-adapter-gscore",
   "bugs": {
-    "url": "https://github.com/puniyu/karin-plugin-git/issues"
+    "url": "https://github.com/puniyu/karin-adapter-gscore/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/puniyu/karin-plugin-git.git"
+    "url": "git+https://github.com/puniyu/karin-adapter-gscore.git"
   },
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "author": "puniyu",
   "type": "module",
   "main": "lib/index.js",
   "files": [
     "config/",
     "lib/",
-    "resources/",
     "LICENSE",
     "package.json",
     "README.md",

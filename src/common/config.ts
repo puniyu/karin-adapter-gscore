@@ -1,9 +1,5 @@
-import path from 'node:path'
-
 import {
   copyConfigSync,
-  filesByExt,
-  getFiles,
   karinPathBase,
   requireFileSync,
   watch,
@@ -20,6 +16,7 @@ class Cfg {
   private dirCfgPath: string
   /** 默认配置文件路径 */
   private defCfgPath: string
+  #configFile = 'config.yaml'
 
   constructor() {
     this.dirCfgPath = `${karinPathBase}/${adapterName}/config/`
@@ -30,28 +27,25 @@ class Cfg {
   initCfg() {
     copyConfigSync(this.defCfgPath, this.dirCfgPath)
 
-    const files = filesByExt(this.dirCfgPath, '.yaml', 'name')
-    for (const file of files) {
-      const configEditor = new YamlEditor(`${this.dirCfgPath}/${file}`)
-      const defConfigEditor = new YamlEditor(`${this.defCfgPath}/${file}`)
+    const configFilePath = `${this.dirCfgPath}/${this.#configFile}`
+    const defConfigFilePath = `${this.defCfgPath}/${this.#configFile}`
+    
+    const configEditor = new YamlEditor(configFilePath)
+    const defConfigEditor = new YamlEditor(defConfigFilePath)
 
-      const { differences, result } = this.mergeObjectsWithPriority(
-        configEditor,
-        defConfigEditor,
-      )
-      if (differences) result.save()
-    }
+    const { differences, result } = this.mergeObjectsWithPriority(
+      configEditor,
+      defConfigEditor,
+    )
+    if (differences) result.save()
 
     /**
      * @description 监听配置文件
      */
-    const list = filesByExt(this.dirCfgPath, '.yaml', 'abs')
-    list.forEach((file) =>
-      watch(file, (_old, _now) => {
-        // logger.info('旧数据:', old);
-        // logger.info('新数据:', now);
-      }),
-    )
+    watch(configFilePath, (_old, _now) => {
+      // logger.info('旧数据:', old);
+      // logger.info('新数据:', now);
+    })
 
     return this
   }
@@ -61,25 +55,15 @@ class Cfg {
    * @param name 配置文件名
    * @returns 返回合并后的配置
    */
-  getDefOrConfig(name: keyof ConfigType) {
-    const def = this.getYaml('defSet', name)
-    const config = this.getYaml('config', name)
+  getDefOrConfig(): ConfigType {
+    const def = this.getYaml('defSet')
+    const config = this.getYaml('config')
     return { ...def, ...config }
   }
 
   /** 获取所有配置文件 */
   All(): ConfigType {
-    const allConfig: ConfigType = {} as ConfigType
-
-    const files = getFiles(this.defCfgPath, ['.yaml'])
-
-    files.forEach((file) => {
-      const fileName = path.basename(file, '.yaml') as keyof ConfigType
-      allConfig[fileName] =
-        this.getDefOrConfig(fileName) ?? ({} as ConfigType[keyof ConfigType])
-    })
-
-    return allConfig
+    return this.getDefOrConfig() as ConfigType
   }
 
   /**
@@ -88,32 +72,30 @@ class Cfg {
    * @param name 配置文件名
    * @returns 返回 YAML 文件内容
    */
-  private getYaml(type: ConfigDirType, name: keyof ConfigType) {
+  private getYaml(type: ConfigDirType) {
     const file =
       type === 'config'
-        ? `${this.dirCfgPath}/${name}.yaml`
-        : `${this.defCfgPath}/${name}.yaml`
+        ? `${this.dirCfgPath}/${this.#configFile}`
+        : `${this.defCfgPath}/${this.#configFile}`
 
     return requireFileSync(file, { force: true })
   }
 
   /**
    * 修改配置文件
-   * @param name 文件名
    * @param key 键
    * @param value 值
    * @param type 配置文件类型，默认为用户配置文件 `config`
    */
   Modify(
-    name: keyof ConfigType,
     key: string,
     value: any,
     type: ConfigDirType = 'config',
   ) {
     const filePath =
       type === 'config'
-        ? `${this.dirCfgPath}/${name}.yaml`
-        : `${this.defCfgPath}/${name}.yaml`
+        ? `${this.dirCfgPath}/config.yaml`
+        : `${this.defCfgPath}/config.yaml`
 
     const editor = new YamlEditor(filePath)
     editor.set(key, value)
@@ -159,7 +141,7 @@ export const Config = new Proxy<Cfg & ConfigType>(
   {
     get(target, prop: string) {
       if (prop in target) return Reflect.get(target, prop)
-      return target.getDefOrConfig(prop as keyof ConfigType)
+      return target.getDefOrConfig()[prop as keyof ConfigType]
     },
   },
 )

@@ -3,7 +3,7 @@ import { defineConfig } from 'tsdown'
 export default defineConfig({
   entry: ['src/index.ts', 'src/web.config.ts'],
   format: ['esm'],
-  bundle: true,
+  unbundle: false,
   dts: false, 
   clean: true, 
   minify: true, 

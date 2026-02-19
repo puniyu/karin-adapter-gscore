@@ -41,7 +41,7 @@
     "oxlint": "^1.26.0",
     "prettier": "^3.6.2",
     "tsc-alias": "1.8.16",
-    "tsdown": "^0.18.0",
+    "tsdown": "^0.20.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },

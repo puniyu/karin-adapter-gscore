@@ -13,5 +13,7 @@ export default defineConfig({
   treeshake: true, 
   platform: 'node', 
   outDir: 'lib',
-  external: [/^node-karin/], 
+  deps: {
+    neverBundle: [/^node-karin/]
+  }
 })
